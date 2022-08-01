@@ -20,6 +20,8 @@ It also includes an `editor for files in CHR format written in JavaScript <#chr-
    </p>
 
 
+You can `use this editor on GitHub Pages <https://sager611.github.io/nes-gravity>`_.
+
 Run
 ---
 
@@ -52,3 +54,5 @@ CHR Editor
 ----------
 
 In the `chreditor-js/ <chreditor-js/>`_ folder you can find ``chreditor.html``. Double-click or open it in a web browser and you should see a simple editor for CHR files.
+
+You can `use this editor on GitHub Pages <https://sager611.github.io/nes-gravity>`_.
