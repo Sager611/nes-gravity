@@ -1,0 +1,179 @@
+<html>
+<head>
+    <title>Simple .chr Editor</title>
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href=
+"https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <link rel="stylesheet" href="materialize-colorpicker/css/bootstrap-colorpicker.min.css">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <link rel="stylesheet" href="styles.css">
+
+</head>
+<body>
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
+    <script src="materialize-colorpicker/js/bootstrap-colorpicker.min.js"></script>
+
+    <nav class="grey">
+        <div class="nav-wrapper container">
+            <span class="nav-header">
+              Simple CHR Editor
+            </span>
+            <ul class="right image-save">
+                <button class="btn btn-flat blue white-text"
+                        onclick="saveImageChr()">
+                  Save CHR
+                </button>
+                <button class="btn btn-flat blue white-text"
+                        onclick="saveImagePng()">
+                  Save PNG
+                </button>
+                <button class="btn btn-flat red white-text"
+                        onclick="resetImage()">
+                  Reset
+                </button>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="image-preview">
+        <!-- Here are the controls for the drawing -->
+        <div class="controls">
+            <!-- Zoom scale -->
+            <span style="margin-top: 10px;">Zoom scale:</span>
+            <div style="display: flex">
+                <input type="range" min="1" max="10" id="zoom-range" name="zoom" value="5" step="1"
+                    style="margin-left: 5px;"
+                    oninput="zoomRangeChangeValue(this.value)"/>
+                <input type="number" min="1" max="10" id="zoom-number" name="zoom" value="5"
+                    style="width: 25%; margin-left: 10px; margin-right: 5px;"
+                    oninput="zoomNumberChangeValue(this.value)" />
+            </div>
+
+            <!-- Colors -->
+            <span>Colors:</span>
+            <div style="display: flex; flex-wrap: wrap;">
+                <div id="color-picker0" class="file-field color-picker">
+                  <div class="btn"></div>
+                  <div class="file-path-wrapper">
+                    <input type="text" />
+                  </div>
+                    <label>
+                        <input class="with-gap" type="radio" id="color0" name="color" value="0"
+                            onclick="updateColorSelection(event)"
+                            checked/>
+                        <span>color 0</span>
+                    </label>
+                </div>
+                <div id="color-picker1" class="file-field color-picker">
+                  <div class="btn"></div>
+                  <div class="file-path-wrapper">
+                    <input type="text" />
+                  </div>
+                    <label>
+                        <input class="with-gap" type="radio" id="color1" name="color" value="1"
+                            onclick="updateColorSelection(event)"
+                        />
+                        <span>color 1</span>
+                    </label>
+                </div>
+                <div id="color-picker2" class="file-field color-picker">
+                  <div class="btn"></div>
+                  <div class="file-path-wrapper">
+                    <input type="text" />
+                  </div>
+                    <label>
+                        <input class="with-gap" type="radio" id="color2" name="color" value="2"
+                            onclick="updateColorSelection(event)"
+                        />
+                        <span>color 2</span>
+                    </label>
+                </div>
+                <div id="color-picker3" class="file-field color-picker">
+                  <div class="btn"></div>
+                  <div class="file-path-wrapper">
+                    <input type="text" />
+                  </div>
+                    <label>
+                        <input class="with-gap" type="radio" id="color3" name="color" value="3"
+                            onclick="updateColorSelection(event)"
+                        />
+                        <span>color 3</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Pencil size -->
+            <span style="margin-top: 10px;">Pencil size:</span>
+            <div style="display: flex">
+                <input type="range" min="1" max="32" id="pencil-size-range" name="pencil"
+                    value="1" step="1"
+                    style="margin-left: 5px;"
+                    oninput="pencilRangeChangeValue(this.value)"/>
+                <input type="number" min="1" max="32" id="pencil-size-number" name="pencil"
+                    value="1"
+                    style="width: 25%; margin-left: 10px; margin-right: 5px;"
+                    oninput="pencilNumberChangeValue(this.value)" />
+            </div>
+
+            <!-- Display grid -->
+            <label style="display: center">
+                <input type="checkbox" class="filled-in"
+                    onclick="changeDisplayGrid(event)"
+                    id="checkbox-display-grid"
+                    checked/>
+                <span>Display grid</span>
+            </label>
+
+            <!-- Undo button -->
+            <a class="waves-effect waves-light grey btn" style="margin: 10px"
+                onclick="undo(event)">
+                <i class="material-icons left">undo</i>Undo</a>
+        </div>
+
+        <!-- Here is where the pixels will be edited -->
+        <div id="canvas-wrapper">
+            <canvas id="canvas-pixels" height="0"
+                onmousedown="canvasMouseDown(event)"
+                onmousemove="canvasMouseMove(event)"
+                onmouseup="canvasMouseUp(event)"></canvas>
+            <canvas id="canvas-grid" height="0"
+                onmousedown="canvasMouseDown(event)"
+                onmousemove="canvasMouseMove(event)"
+                onmouseup="canvasMouseUp(event)"></canvas>
+        </div>
+    </div>
+    <div class="container app">
+
+        <!-- Text to be shown at the beginning
+        of the application -->
+        <div class="help-text center-align">
+            <h5>Please select a CHR image file to start editing</h5>
+        </div>
+
+        <!-- File control to upload a new file -->
+        <div class="file-controls">
+            <!-- Element that will be later used to download
+            the canvas image from code -->
+            <a id="link"></a>
+
+            <!-- File Selector for uploading the image -->
+            <div class="file-field input-field">
+                <div class="btn black">
+                    <span>Upload CHR</span>
+                    <input type="file" accept=".chr"
+                           onchange="uploadImage(event)">
+                </div>
+                <div class="file-path-wrapper">
+                    <input style="color:#ffffff" class="file-path" type="text">
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <script src="chr.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>

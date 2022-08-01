@@ -1,0 +1,57 @@
+body {
+    background-color: #303030;
+    color: #ffffff;
+}
+
+.nav-header {
+    font-size: 1.5rem;
+}
+
+.row {
+    margin-bottom: 0;
+}
+
+.image-save {
+    /* make the save controls invisible at first */
+    display: none;
+}
+
+.image-preview {
+    /* make the canvas and controls invisible at first */
+    display: none;
+
+    flex-wrap: wrap;
+    text-align: center;
+    font-size: 18px;
+    justify-content: flex-start;
+    margin-top: 20px;
+}
+
+.controls {
+    display: flex;
+    width: 25%;
+    flex-direction: column;
+    margin-left: 10px;
+    background: #e1e1e1;
+    color: #000000;
+}
+
+.color-picker {
+    width: 45%;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#canvas-wrapper {
+    position: relative;
+    margin-left: 20px;
+}
+
+#canvas-pixels, #canvas-grid {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+
+    border-style: solid;
+    border-width: 3px;
+}
