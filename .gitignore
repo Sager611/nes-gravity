@@ -1,2 +1,5 @@
 # old CHR editor using Python and PyGame
 chreditor.py
+
+# gif files
+*.gif
