@@ -3,3 +3,6 @@ chreditor.py
 
 # gif files
 *.gif
+
+# nvim-related
+.undodir
